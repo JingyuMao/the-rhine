@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>River Destination Component — Bento Grid</title>
+<style>
+  :root{
+    --paper:#f6f3ec;
+    --ink:#1c231f;
+    --navy:#1c2b33;
+    --sage:#6b7d78;
+    --line:#e7e2d6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,"Segoe UI",sans-serif;
+  }
+  .frame{
+    width:100%;
+    margin:0;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-template-rows:repeat(2, 220px);
+    gap:8px;
+  }
+  .tile{
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* image tiles */
+  .tile.photo img{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+
+  /* text tiles */
+  .tile.text{
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .tile.text.light{background:#f4f1ea;color:var(--ink);}
+  .tile.text.navy{background:var(--navy);color:#f2efe6;}
+  .tile.text.sage{background:var(--sage);color:#f2efe6;}
+
+  .tile h3{
+    font-family:"Iowan Old Style","Georgia",serif;
+    font-size:19px;font-weight:600;margin:0 0 10px;line-height:1.25;
+  }
+  .tile p{
+    font-size:12.5px;line-height:1.55;margin:0 0 14px;
+    opacity:0.85;
+    max-width:22ch;
+  }
+  .tile .link{
+    font-size:11.5px;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    opacity:0.9;
+    cursor:pointer;
+  }
+
+  /* video tile */
+  .tile.video{cursor:pointer;}
+  .tile.video img{width:100%;height:100%;object-fit:cover;display:block;}
+  .tile.video .overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(0deg, rgba(10,18,15,.55), rgba(10,18,15,.1));
+    display:flex;flex-direction:column;justify-content:flex-end;
+    padding:16px;
+  }
+  .tile.video .play-ring{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:46px;height:46px;border-radius:50%;
+    background:rgba(246,243,236,0.92);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .18s ease;
+  }
+  .tile.video:hover .play-ring{transform:translate(-50%,-50%) scale(1.08);}
+  .tile.video .vid-label{
+    color:#f2efe6;font-size:12.5px;font-weight:500;
+    letter-spacing:0.2px;
+  }
+
+  @media (max-width:760px){
+    .grid{
+      grid-template-columns:repeat(2, 1fr);
+      grid-template-rows:repeat(4, 200px);
+    }
+  }
+
+  /* ---- modal ---- */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(15,22,19,.82);
+    display:none;align-items:center;justify-content:center;
+    padding:24px;z-index:50;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{width:100%;max-width:860px;aspect-ratio:16/9;position:relative;background:#000;}
+  .modal-box iframe{width:100%;height:100%;border:0;display:block;}
+  .modal-close{
+    position:absolute;top:-40px;right:0;background:transparent;border:0;
+    color:#f2efe6;font-size:14px;cursor:pointer;letter-spacing:0.3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="grid">
+
+    <div class="tile photo">
+      <img src="https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80" alt="Danube river at sunset">
+    </div>
+
+    <div class="tile text light">
+      <h3>Guided Excursions</h3>
+      <p>Explore historic towns and castles with an expert local guide at every port of call.</p>
+      <span class="link">More information</span>
+    </div>
+
+    <div class="tile photo">
+      <img src="https://images.unsplash.com/photo-1595867818082-083862f3d630?w=800&q=80" alt="Danube castle view">
+    </div>
+
+    <div class="tile text navy">
+      <h3>Onboard Comfort</h3>
+      <p>Spacious suites, panoramic views, and a dining experience shaped by the destinations you sail through.</p>
+      <span class="link">More information</span>
+    </div>
+
+    <div class="tile text sage">
+      <h3>Local Cuisine</h3>
+      <p>Regional wines and seasonal menus inspired by the villages along the riverbank.</p>
+      <span class="link">More information</span>
+    </div>
+
+    <div class="tile photo">
+      <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?w=800&q=80" alt="Vineyard along the river">
+    </div>
+
+    <div class="tile text light">
+      <h3>Flexible Itineraries</h3>
+      <p>Choose from river-only sailings or land-extension packages at either end of your journey.</p>
+      <span class="link">More information</span>
+    </div>
+
+    <div class="tile video" id="videoTile">
+      <img src="https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=800&q=80" alt="Watch the destination video">
+      <div class="overlay">
+        <div class="vid-label">Watch: Sailing the Danube</div>
+      </div>
+      <div class="play-ring">
+        <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1.5 1.5L14.5 9L1.5 16.5V1.5Z" fill="#1c2b33"/></svg>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">Close ✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+  const YT_ID = "dQw4w9WgXcQ"; // placeholder — swap for the real video ID
+  const overlay = document.getElementById('modalOverlay');
+  const modalContent = document.getElementById('modalContent');
+
+  function openModal(){
+    modalContent.innerHTML = `<iframe src="https://www.youtube.com/embed/${YT_ID}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen title="Destination video"></iframe>`;
+    overlay.classList.add('open');
+  }
+  function closeModal(){
+    overlay.classList.remove('open');
+    modalContent.innerHTML = '';
+  }
+  document.getElementById('videoTile').addEventListener('click', openModal);
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+</script>
+</body>
+</html>
