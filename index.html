@@ -15,18 +15,18 @@
     button{font:inherit}
     button:focus-visible,a:focus-visible{outline:3px solid #b17a27;outline-offset:5px}
     .experience{width:100%;max-width:none;padding:0;margin:0}
-    .eyebrow{display:block;font-size:11px;line-height:1.5;font-weight:600;letter-spacing:1.8px;text-transform:uppercase}
+    .eyebrow{display:block;font-size:12px;line-height:1.5;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;font-variant-numeric:lining-nums}
     h1,h2,p{margin:0}
     h1,h2{font-family:Raleway,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:500}
     h1{font-size:clamp(32px,8vw,42px);line-height:1.12;letter-spacing:-.8px;margin:0;text-wrap:balance}
-    .stories{display:grid;gap:28px}
+    .stories{display:grid;gap:16px}
     .story{min-width:0;border-radius:var(--radius);overflow:hidden;background:#efece4}
     .media{position:relative;aspect-ratio:1.55;background:#d3ded8;overflow:hidden}
     .media img,.film img{width:100%;height:100%;display:block;object-fit:cover}
     .copy{padding:24px}
-    .copy .eyebrow{margin-bottom:0}
-    .copy h2{font-size:26px;line-height:1.16;letter-spacing:-.3px;margin-bottom:0;text-wrap:balance}
-    .copy p{font-size:14px;line-height:1.65;max-width:42ch}
+    .copy .eyebrow{margin-bottom:10px}
+    .copy h2{font-size:26px;line-height:1.18;letter-spacing:-.2px;margin-bottom:12px;text-wrap:balance}
+    .copy p{font-size:15px;line-height:1.65;max-width:42ch}
     .story:nth-child(2){background:var(--navy);color:var(--paper)}
     .story:nth-child(3){background:var(--sage)}
     .story:nth-child(4){background:#ece9e0}
@@ -35,7 +35,7 @@
     .film:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,18,15,.78),rgba(10,18,15,.12) 75%)}
     .film-label{position:absolute;z-index:1;left:20px;right:20px;bottom:20px}
     .film-title{display:block;font-family:Raleway,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:500;font-size:26px;line-height:1.2;margin:0}
-    .film-status{font-size:13px}
+    .film-status{display:block;margin-top:6px;font-size:13px}
     .film-symbol{position:absolute;z-index:1;top:50%;left:50%;transform:translate(-50%,-50%);border:0;border-radius:50%;width:54px;height:54px;display:grid;place-items:center;background:rgba(246,243,236,.96);color:var(--navy);transition:transform .18s ease,background .18s ease}
     .film-symbol svg{width:22px;height:22px}
     .film:hover .film-symbol,.film:focus-visible .film-symbol{background:#fff;transform:translate(-50%,-50%) scale(1.06)}
@@ -43,13 +43,17 @@
     .film:active{filter:brightness(.9)}
     dialog{position:fixed;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:calc(100% - 32px);max-width:820px;max-height:calc(100svh - 32px);overflow:auto;border:0;padding:24px;border-radius:16px;background:var(--paper);color:var(--ink)}
     dialog::backdrop{background:rgba(15,22,19,.8)}
-    .dialog-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:0}
+    .dialog-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
     .dialog-header h2{font-size:26px;line-height:1.2}
     .close{min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink);padding:8px 12px;cursor:pointer}
     .close:hover{background:var(--sage)}
     .video-frame{aspect-ratio:16/9;width:100%;border:0;display:block}
     .film-message{padding:24px 0;color:var(--muted)}
-    @media(min-width:761px){
+    @media(min-width:600px) and (max-width:1099px){
+      .stories{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .film{grid-column:1/-1;aspect-ratio:2.2}
+    }
+    @media(min-width:1100px){
       .experience{max-width:none;padding:0;margin:0}
       .stories{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(280px,1fr));gap:10px;min-height:100svh}
       .story{display:contents}
