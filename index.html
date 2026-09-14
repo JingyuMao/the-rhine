@@ -11,7 +11,7 @@
     body{margin:0;background:transparent;color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
     button{font:inherit}
     button:focus-visible,a:focus-visible{outline:3px solid #b17a27;outline-offset:5px}
-    .experience{padding:40px max(20px,env(safe-area-inset-right)) 40px max(20px,env(safe-area-inset-left));max-width:640px;margin:0}
+    .experience{width:100%;max-width:none;padding:0;margin:0}
     .intro{margin:0}
     .eyebrow{display:block;font-size:11px;line-height:1.5;font-weight:600;letter-spacing:1.8px;text-transform:uppercase}
     h1,h2,p{margin:0}
@@ -49,9 +49,9 @@
     .video-frame{aspect-ratio:16/9;width:100%;border:0;display:block}
     .film-message{padding:24px 0;color:var(--muted)}
     @media(min-width:761px){
-      .experience{max-width:1600px;padding:24px}
+      .experience{max-width:none;padding:0;margin:0}
       .intro{position:absolute;width:1px;height:1px;padding:0;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-      .stories{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(280px,1fr));gap:10px;min-height:calc(100svh - 48px)}
+      .stories{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(280px,1fr));gap:10px;min-height:100svh}
       .story{display:contents}
       .media,.copy{border-radius:var(--radius);overflow:hidden}
       .media{aspect-ratio:auto;min-height:0}
