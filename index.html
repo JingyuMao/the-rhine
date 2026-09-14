@@ -1,196 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>River Destination Component — Bento Grid</title>
-<style>
-  :root{
-    --paper:#f6f3ec;
-    --ink:#1c231f;
-    --navy:#1c2b33;
-    --sage:#6b7d78;
-    --line:#e7e2d6;
-  }
-  *{box-sizing:border-box;}
-  html,body{
-    height:100%;
-    margin:0;
-    font-family:-apple-system,"Segoe UI",sans-serif;
-  }
-  .frame{
-    width:100%;
-    height:100%;
-    margin:0;
-  }
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    grid-template-rows:repeat(2, 1fr);
-    gap:8px;
-    height:100%;
-  }
-  .tile{
-    border-radius:8px;
-    overflow:hidden;
-    position:relative;
-  }
-
-  /* image tiles */
-  .tile.photo img{
-    width:100%;height:100%;object-fit:cover;display:block;
-  }
-
-  /* text tiles */
-  .tile.text{
-    padding:22px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-  }
-  .tile.text.light{background:#f4f1ea;color:var(--ink);}
-  .tile.text.navy{background:var(--navy);color:#f2efe6;}
-  .tile.text.sage{background:var(--sage);color:#f2efe6;}
-
-  .tile h3{
-    font-family:"Iowan Old Style","Georgia",serif;
-    font-size:19px;font-weight:600;margin:0 0 10px;line-height:1.25;
-  }
-  .tile p{
-    font-size:12.5px;line-height:1.55;margin:0 0 14px;
-    opacity:0.85;
-    max-width:22ch;
-  }
-  .tile .link{
-    font-size:11.5px;
-    text-decoration:underline;
-    text-underline-offset:3px;
-    opacity:0.9;
-    cursor:pointer;
-  }
-
-  /* video tile */
-  .tile.video{cursor:pointer;}
-  .tile.video img{width:100%;height:100%;object-fit:cover;display:block;}
-  .tile.video .overlay{
-    position:absolute;inset:0;
-    background:linear-gradient(0deg, rgba(10,18,15,.55), rgba(10,18,15,.1));
-    display:flex;flex-direction:column;justify-content:flex-end;
-    padding:16px;
-  }
-  .tile.video .play-ring{
-    position:absolute;top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    width:46px;height:46px;border-radius:50%;
-    background:rgba(246,243,236,0.92);
-    display:flex;align-items:center;justify-content:center;
-    transition:transform .18s ease;
-  }
-  .tile.video:hover .play-ring{transform:translate(-50%,-50%) scale(1.08);}
-  .tile.video .vid-label{
-    color:#f2efe6;font-size:12.5px;font-weight:500;
-    letter-spacing:0.2px;
-  }
-
-  @media (max-width:760px){
-    .grid{
-      grid-template-columns:repeat(2, 1fr);
-      grid-template-rows:repeat(4, 1fr);
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>River Family — The River Experience</title>
+  <style>
+    :root{--paper:#f6f3ec;--ink:#1c2b33;--muted:#52605b;--navy:#1c2b33;--sage:#dce3dc;--line:#dcded5;--radius:12px}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button{font:inherit}
+    button:focus-visible,a:focus-visible{outline:3px solid #b17a27;outline-offset:5px}
+    .experience{padding:40px max(20px,env(safe-area-inset-right)) 40px max(20px,env(safe-area-inset-left));max-width:640px;margin:auto}
+    .intro{margin:0 0 32px}
+    .eyebrow{display:block;font-size:11px;line-height:1.5;font-weight:600;letter-spacing:1.8px;text-transform:uppercase}
+    h1,h2,p{margin:0}
+    h1,h2{font-family:"Iowan Old Style",Georgia,serif;font-weight:400}
+    h1{font-size:clamp(32px,8vw,42px);line-height:1.12;letter-spacing:-.8px;margin:12px 0 16px;text-wrap:balance}
+    .intro p{color:var(--muted);max-width:34ch}
+    .stories{display:grid;gap:28px}
+    .story{min-width:0;border-radius:var(--radius);overflow:hidden;background:#efece4}
+    .media{position:relative;aspect-ratio:1.55;background:#d3ded8;overflow:hidden}
+    .media img,.film img{width:100%;height:100%;display:block;object-fit:cover}
+    .copy{padding:24px}
+    .copy .eyebrow{margin-bottom:12px}
+    .copy h2{font-size:26px;line-height:1.16;letter-spacing:-.3px;margin-bottom:12px;text-wrap:balance}
+    .copy p{font-size:14px;line-height:1.65;max-width:42ch}
+    .story:nth-child(2){background:var(--navy);color:var(--paper)}
+    .story:nth-child(3){background:var(--sage)}
+    .story:nth-child(4){background:#ece9e0}
+    .film{width:100%;position:relative;display:block;min-height:300px;border:0;padding:0;border-radius:var(--radius);overflow:hidden;background:var(--navy);color:white;aspect-ratio:1.55;text-align:left;cursor:pointer}
+    .film > img{position:absolute;inset:0}
+    .film:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,18,15,.78),rgba(10,18,15,.12) 75%)}
+    .film-label{position:absolute;z-index:1;left:20px;right:20px;bottom:20px}
+    .film-title{display:block;font-family:Georgia,serif;font-size:26px;line-height:1.2;margin:0 0 4px}
+    .film-status{font-size:13px}
+    .film-symbol{position:absolute;z-index:1;top:50%;left:50%;transform:translate(-50%,-50%);border:0;border-radius:50%;width:54px;height:54px;display:grid;place-items:center;background:rgba(246,243,236,.96);color:var(--navy);transition:transform .18s ease,background .18s ease}
+    .film-symbol svg{width:22px;height:22px}
+    .film:hover .film-symbol,.film:focus-visible .film-symbol{background:#fff;transform:translate(-50%,-50%) scale(1.06)}
+    .film:active .film-symbol{transform:translate(-50%,-50%) scale(.98)}
+    .film:active{filter:brightness(.9)}
+    dialog{width:calc(100% - 32px);max-width:820px;max-height:calc(100svh - 32px);overflow:auto;border:0;padding:24px;border-radius:16px;background:var(--paper);color:var(--ink)}
+    dialog::backdrop{background:rgba(15,22,19,.8)}
+    .dialog-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .dialog-header h2{font-size:26px;line-height:1.2}
+    .close{min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink);padding:8px 12px;cursor:pointer}
+    .close:hover{background:var(--sage)}
+    .video-frame{aspect-ratio:16/9;width:100%;border:0;display:block}
+    .film-message{padding:24px 0;color:var(--muted)}
+    @media(min-width:761px){
+      .experience{max-width:1600px;padding:24px}
+      .intro{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+      .stories{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(280px,1fr));gap:10px;min-height:calc(100svh - 48px)}
+      .story{display:contents}
+      .media,.copy{border-radius:var(--radius);overflow:hidden}
+      .media{aspect-ratio:auto;min-height:0}
+      .media img{position:absolute;inset:0}
+      .copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(20px,2.4vw,40px);background:#efece4;color:var(--ink)}
+      .copy h2{font-size:26px}
+      .copy p{font-size:16px}
+      .story:nth-child(1) .media{grid-area:1/1}.story:nth-child(1) .copy{grid-area:1/2}
+      .story:nth-child(2) .media{grid-area:1/3}.story:nth-child(2) .copy{grid-area:1/4;background:var(--navy);color:var(--paper)}
+      .story:nth-child(3) .media{grid-area:2/2}.story:nth-child(3) .copy{grid-area:2/1;background:#dce3dc}
+      .story:nth-child(4) .media{display:none}.story:nth-child(4) .copy{grid-area:2/3}
+      .film{grid-area:2/4;aspect-ratio:auto;min-height:320px}
+      .film img{position:absolute;inset:0}
     }
-  }
-
-  /* ---- modal ---- */
-  .modal-overlay{
-    position:fixed;inset:0;
-    background:rgba(15,22,19,.82);
-    display:none;align-items:center;justify-content:center;
-    padding:24px;z-index:50;
-  }
-  .modal-overlay.open{display:flex;}
-  .modal-box{width:100%;max-width:860px;aspect-ratio:16/9;position:relative;background:#000;}
-  .modal-box iframe{width:100%;height:100%;border:0;display:block;}
-  .modal-close{
-    position:absolute;top:-40px;right:0;background:transparent;border:0;
-    color:#f2efe6;font-size:14px;cursor:pointer;letter-spacing:0.3px;
-  }
-</style>
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+  </style>
 </head>
 <body>
-
-<div class="frame">
-  <div class="grid">
-
-    <div class="tile photo">
-      <img src="https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80" alt="Danube river at sunset">
+  <main class="experience" aria-labelledby="experience-title">
+    <header class="intro">
+      <span class="eyebrow">The river experience</span>
+      <h1 id="experience-title">Every bend,<br>a new discovery.</h1>
+      <p>Historic towns, local flavours, and time to take it all in.</p>
+    </header>
+    <div class="stories">
+      <article class="story" aria-labelledby="explore-title">
+        <div class="media"><img src="image/01%20culture.jpeg" alt="A street performer makes giant soap bubbles in a European town square" width="1440" height="720" fetchpriority="high"></div>
+        <div class="copy"><span class="eyebrow">01 · Culture</span><h2 id="explore-title">Embrace and celebrate European flair</h2><p>Sail across the most iconic countries of Europe and discover the traditions that make each culture unique.</p></div>
+      </article>
+      <article class="story" aria-labelledby="comfort-title">
+        <div class="media"><img src="image/02%20history.jpeg" alt="A hilltop castle overlooking a riverside town and vineyards" width="1440" height="720" loading="lazy"></div>
+        <div class="copy"><span class="eyebrow">02 · History</span><h2 id="comfort-title">Fairy tale landscapes</h2><p>The heart of Europe is home to castles and kingdoms straight from the pages of fables and fairy tales.</p></div>
+      </article>
+      <article class="story" aria-labelledby="cuisine-title">
+        <div class="media"><img src="image/03%20Scenery.jpeg" alt="A river winding past vineyards, a wooded hillside and a castle" width="1440" height="720" loading="lazy"></div>
+        <div class="copy"><span class="eyebrow">03 · Scenery</span><h2 id="cuisine-title">The beauty of nature</h2><p>Witness stunning fields and vineyards, as you sail past charming towns and villages along the Rhine River.</p></div>
+      </article>
+      <article class="story" aria-labelledby="itinerary-title">
+        <div class="media"><img src="https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Architecture on a European journey" width="1200" height="775" loading="lazy"></div>
+        <div class="copy"><span class="eyebrow">04 · Explore</span><h2 id="itinerary-title">Explore the delights of the Rhine River</h2><p>Sail on a voyage of discovery on board a Rhine river cruise and unveil gems such as the Black Forest and the cultural Meccah of Amsterdam.</p></div>
+      </article>
+      <button class="film" type="button" id="openFilm" aria-haspopup="dialog" aria-controls="filmDialog">
+        <img src="image/video%20cover.png" alt="" width="2032" height="1146" loading="lazy">
+        <span class="film-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 5 11 7-11 7V5Z" fill="currentColor" stroke="none"/></svg></span>
+        <span class="film-label"><span class="film-title">Sailing the Rhine</span><span class="film-status" id="filmStatus">Watch the film</span></span>
+      </button>
     </div>
-
-    <div class="tile text light">
-      <h3>Guided Excursions</h3>
-      <p>Explore historic towns and castles with an expert local guide at every port of call.</p>
-      <span class="link">More information</span>
-    </div>
-
-    <div class="tile photo">
-      <img src="https://images.unsplash.com/photo-1595867818082-083862f3d630?w=800&q=80" alt="Danube castle view">
-    </div>
-
-    <div class="tile text navy">
-      <h3>Onboard Comfort</h3>
-      <p>Spacious suites, panoramic views, and a dining experience shaped by the destinations you sail through.</p>
-      <span class="link">More information</span>
-    </div>
-
-    <div class="tile text sage">
-      <h3>Local Cuisine</h3>
-      <p>Regional wines and seasonal menus inspired by the villages along the riverbank.</p>
-      <span class="link">More information</span>
-    </div>
-
-    <div class="tile photo">
-      <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?w=800&q=80" alt="Vineyard along the river">
-    </div>
-
-    <div class="tile text light">
-      <h3>Flexible Itineraries</h3>
-      <p>Choose from river-only sailings or land-extension packages at either end of your journey.</p>
-      <span class="link">More information</span>
-    </div>
-
-    <div class="tile video" id="videoTile">
-      <img src="https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=800&q=80" alt="Watch the destination video">
-      <div class="overlay">
-        <div class="vid-label">Watch: Sailing the Danube</div>
-      </div>
-      <div class="play-ring">
-        <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1.5 1.5L14.5 9L1.5 16.5V1.5Z" fill="#1c2b33"/></svg>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <button class="modal-close" id="modalClose">Close ✕</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
-<script>
-  const YT_ID = "dQw4w9WgXcQ"; // placeholder — swap for the real video ID
-  const overlay = document.getElementById('modalOverlay');
-  const modalContent = document.getElementById('modalContent');
-
-  function openModal(){
-    modalContent.innerHTML = `<iframe src="https://www.youtube.com/embed/${YT_ID}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen title="Destination video"></iframe>`;
-    overlay.classList.add('open');
-  }
-  function closeModal(){
-    overlay.classList.remove('open');
-    modalContent.innerHTML = '';
-  }
-  document.getElementById('videoTile').addEventListener('click', openModal);
-  document.getElementById('modalClose').addEventListener('click', closeModal);
-  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
-</script>
+  </main>
+  <dialog id="filmDialog" aria-labelledby="filmTitle">
+    <div class="dialog-header"><h2 id="filmTitle">Sailing the Rhine</h2><button class="close" type="button" id="closeFilm" autofocus>Close</button></div>
+    <div id="filmContent"></div>
+  </dialog>
+  <script>
+    // Wistia media ID from the supplied Emerald Cruises destination link.
+    const WISTIA_ID = 'jn714pppqm';
+    const dialog = document.getElementById('filmDialog');
+    const content = document.getElementById('filmContent');
+    const opener = document.getElementById('openFilm');
+    let previousOverflow = '';
+    opener.addEventListener('click', () => {
+      {
+        const iframe = document.createElement('iframe');
+        iframe.className = 'video-frame';
+        iframe.src = 'https://fast.wistia.net/embed/iframe/' + WISTIA_ID + '?autoPlay=true&videoFoam=false&playsinline=true';
+        iframe.title = 'Sailing the Rhine destination film';
+        iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+        iframe.allowFullscreen = true;
+        content.replaceChildren(iframe);
+      }
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      dialog.showModal();
+    });
+    document.getElementById('closeFilm').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => {
+      const rect = dialog.getBoundingClientRect();
+      if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) dialog.close();
+    });
+    dialog.addEventListener('close', () => {
+      content.querySelector('iframe')?.remove();
+      document.body.style.overflow = previousOverflow;
+      opener.focus();
+    });
+  </script>
 </body>
 </html>
