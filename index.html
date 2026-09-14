@@ -12,12 +12,10 @@
     button{font:inherit}
     button:focus-visible,a:focus-visible{outline:3px solid #b17a27;outline-offset:5px}
     .experience{width:100%;max-width:none;padding:0;margin:0}
-    .intro{margin:0}
     .eyebrow{display:block;font-size:11px;line-height:1.5;font-weight:600;letter-spacing:1.8px;text-transform:uppercase}
     h1,h2,p{margin:0}
     h1,h2{font-family:"Iowan Old Style",Georgia,serif;font-weight:400}
     h1{font-size:clamp(32px,8vw,42px);line-height:1.12;letter-spacing:-.8px;margin:0;text-wrap:balance}
-    .intro p{color:var(--muted);max-width:34ch}
     .stories{display:grid;gap:28px}
     .story{min-width:0;border-radius:var(--radius);overflow:hidden;background:#efece4}
     .media{position:relative;aspect-ratio:1.55;background:#d3ded8;overflow:hidden}
@@ -50,7 +48,6 @@
     .film-message{padding:24px 0;color:var(--muted)}
     @media(min-width:761px){
       .experience{max-width:none;padding:0;margin:0}
-      .intro{position:absolute;width:1px;height:1px;padding:0;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
       .stories{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(280px,1fr));gap:10px;min-height:100svh}
       .story{display:contents}
       .media,.copy{border-radius:var(--radius);overflow:hidden}
@@ -66,16 +63,12 @@
       .film{grid-area:2/4;aspect-ratio:auto;min-height:320px}
       .film img{position:absolute;inset:0}
     }
+    .embedded .stories{min-height:0}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
-  <main class="experience" aria-labelledby="experience-title">
-    <header class="intro">
-      <span class="eyebrow">The river experience</span>
-      <h1 id="experience-title">Every bend,<br>a new discovery.</h1>
-      <p>Historic towns, local flavours, and time to take it all in.</p>
-    </header>
+  <main class="experience" aria-label="The Rhine">
     <div class="stories">
       <article class="story" aria-labelledby="explore-title">
         <div class="media"><img src="image/01%20culture.jpeg" alt="A street performer makes giant soap bubbles in a European town square" width="1440" height="720" fetchpriority="high"></div>
@@ -111,6 +104,15 @@
     const content = document.getElementById('filmContent');
     const opener = document.getElementById('openFilm');
     let previousOverflow = '';
+    // When embedded, report the content height so the host iframe can grow to fit without scrolling.
+    const embedded = window.parent !== window;
+    if (embedded) {
+      document.documentElement.classList.add('embedded');
+      const main = document.querySelector('main');
+      const postHeight = () => window.parent.postMessage({ type: 'rhine:height', height: Math.ceil(main.getBoundingClientRect().height) }, '*');
+      new ResizeObserver(postHeight).observe(main);
+      window.addEventListener('load', postHeight);
+    }
     opener.addEventListener('click', () => {
       {
         const iframe = document.createElement('iframe');
@@ -124,6 +126,12 @@
       previousOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
       dialog.showModal();
+      if (embedded) {
+        // The iframe is as tall as the page, so centre the player near the film tile instead of the middle of the page.
+        const r = opener.getBoundingClientRect();
+        const half = dialog.offsetHeight / 2 + 16;
+        dialog.style.top = Math.min(Math.max(r.top + r.height / 2, half), innerHeight - half) + 'px';
+      }
     });
     document.getElementById('closeFilm').addEventListener('click', () => dialog.close());
     dialog.addEventListener('click', event => {
